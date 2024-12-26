@@ -28,3 +28,35 @@
 (define-constant ERR-NOT-EMERGENCY (err u113))
 (define-constant ERR-INVALID-PARAMETER (err u114))
 (define-constant ERR-NO-RETURNS (err u115))
+
+;; Data variables
+(define-data-var dao-admin principal tx-sender)
+(define-data-var minimum-quorum uint u500) ;; 50% in basis points
+(define-data-var voting-period uint u144) ;; ~1 day in blocks
+(define-data-var proposal-count uint u0)
+(define-data-var treasury-balance uint u0)
+(define-data-var emergency-state bool false)
+
+;; Governance Parameters
+(define-data-var dao-parameters
+    {
+        proposal-fee: uint,
+        min-proposal-amount: uint,
+        max-proposal-amount: uint,
+        voting-delay: uint,
+        voting-period: uint,
+        timelock-period: uint,
+        quorum-threshold: uint,
+        super-majority: uint
+    }
+    {
+        proposal-fee: u100000, ;; 0.1 STX
+        min-proposal-amount: u1000000, ;; 1 STX
+        max-proposal-amount: u1000000000, ;; 1000 STX
+        voting-delay: u100, ;; blocks before voting starts
+        voting-period: u144, ;; ~1 day in blocks
+        timelock-period: u72, ;; ~12 hours in blocks
+        quorum-threshold: u500, ;; 50% in basis points
+        super-majority: u667 ;; 66.7% in basis points
+    }
+)
