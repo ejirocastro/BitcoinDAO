@@ -133,6 +133,8 @@
 (define-public (set-emergency-state (state bool))
     (begin
         (asserts! (is-emergency-admin tx-sender) ERR-NOT-AUTHORIZED)
+        ;; Prevent redundant state changes
+        (asserts! (not (is-eq state (var-get emergency-state))) ERR-INVALID-PARAMETER)
         (var-set emergency-state state)
         (ok true)
     )
