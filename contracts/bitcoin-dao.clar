@@ -308,3 +308,37 @@
         (ok true)
     )
 )
+
+;; Helper functions
+
+(define-private (calculate-member-share (member principal) (pool-id uint))
+    (let
+        (
+            (pool (unwrap! (get-return-pool pool-id) u0))
+            (member-info (unwrap! (get-member-info member) u0))
+            (total-shares (var-get treasury-balance))
+        )
+        (if (> total-shares u0)
+            (/ (* (get total-amount pool) (get voting-power member-info)) total-shares)
+            u0
+        )
+    )
+)
+
+(define-private (validate-parameters (params {
+    proposal-fee: uint,
+    min-proposal-amount: uint,
+    max-proposal-amount: uint,
+    voting-delay: uint,
+    voting-period: uint,
+    timelock-period: uint,
+    quorum-threshold: uint,
+    super-majority: uint
+}))
+    (and
+        (< (get min-proposal-amount params) (get max-proposal-amount params))
+        (<= (get quorum-threshold params) u1000)
+        (<= (get super-majority params) u1000)
+        (> (get voting-period params) (get voting-delay params))
+    )
+)
