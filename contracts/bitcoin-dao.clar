@@ -342,3 +342,40 @@
         (> (get voting-period params) (get voting-delay params))
     )
 )
+
+;; Read-only functions
+(define-read-only (get-member-info (member principal))
+    (map-get? members member)
+)
+
+(define-read-only (get-proposal-by-id (proposal-id uint))
+    (map-get? proposals proposal-id)
+)
+
+(define-read-only (get-vote (proposal-id uint) (voter principal))
+    (map-get? votes {proposal-id: proposal-id, voter: voter})
+)
+
+(define-read-only (get-delegation (member principal))
+    (map-get? delegations member)
+)
+
+(define-read-only (get-return-pool (pool-id uint))
+    (map-get? return-pools pool-id)
+)
+
+(define-read-only (has-claimed (member principal) (pool-id uint))
+    (default-to false (get claimed (map-get? member-claims {member: member, pool-id: pool-id})))
+)
+
+(define-read-only (is-emergency-admin (admin principal))
+    (default-to false (map-get? emergency-admins admin))
+)
+
+(define-read-only (get-dao-parameters)
+    (ok (var-get dao-parameters))
+)
+
+(define-read-only (get-treasury-balance)
+    (ok (var-get treasury-balance))
+)
